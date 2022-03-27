@@ -1,0 +1,12 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: authentication-middleware
+  namespace: default
+spec:
+  forwardAuth:
+    address: "http://10.43.101.20/auth"
+    trustForwardHeader: true
+    authResponseHeaders:
+      - X-Auth-User
+      - X-Token

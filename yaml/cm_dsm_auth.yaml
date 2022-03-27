@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dsm-auth
+  labels:
+    app.kubernetes.io/name: dsm-auth
+    helm.sh/chart: dsm-auth-1.0
+    app.kubernetes.io/instance: dsm-auth
+data:
+  dsm_auth.conf: |
+    [Database]
+      type: mariadb
+      driver: mariadbconnector
+      # TODO: this configuration should be in secret yaml file.
+      root_password: NAS_PASS
+      host: mariadb-galera
+      port: 3306
+      name: auth
+
+    [Flask]
+      debug=True
+      sqlalchemy_track_modifications = True
+      token_lifetime: 180
+      # TODO: this configuration should be in secret yaml file.
+      secret_key: secret-key

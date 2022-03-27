@@ -1,0 +1,99 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: auth-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: auth-service
+    spec:
+      shareProcessNamespace: true
+      containers:
+      - name: dsm-auth
+        image: lenovonetapp.io/library/dsm-auth:1.0
+        workingDir: /usr/local/lib/python3.8/site-packages/dsm_auth
+#        command: ["/bin/bash", "-ce", "tail -f /dev/null"]
+        command: ["python3"]
+        args: ["routes.py", "--host", $(flask_host), "--port", $(flask_port)]
+        imagePullPolicy: Never
+        env:
+          - name: flask_host
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: flask_port
+            value: "80"
+        ports:
+        - containerPort: 80
+#        readinessProbe:
+#          initialDelaySeconds: 5
+#          periodSeconds: 5
+#          successThreshold: 1
+#          timeoutSeconds: 5
+#          exec:
+#            command:
+#              - /bin/bash
+#              - -ec
+#              - |
+#                password_aux="${db_root_password:-}"
+#                ## Check Mariadb is available!
+#                #  Check mariadb status
+#                mysqladmin --host=mariadb-service --port=30306 --user=root --password="${password_aux}" status
+#                #  Check database DSM is available in mariadb
+#                mysql --host=mariadb-service --port=30306 --user=root --password="${password_aux}" -e 'use DSM;'
+        volumeMounts:
+        - name: dsm-auth-log
+          mountPath: /var/log/dsm
+        - name: dsm-auth-conf
+          mountPath: /opt/dsm_auth/dsm_auth.conf
+          subPath: dsm_auth.conf
+      volumes:
+      - name: dsm-auth-log
+        hostPath:
+          path: /var/log/dsm
+      - name: dsm-auth-conf
+        configMap:
+          name: dsm-auth
+
+#      initContainers:
+#      - name: check-mariadb
+#        image: lenovonetapp.io/library/initcontainer:1.0
+#        env:
+#          - name: db_root_password
+#            valueFrom:
+#              configMapKeyRef:
+#                name: dsm-auth
+#                key: db_root_password
+#        command:
+#          - /bin/bash
+#          - -ec
+#          - |
+#            password_aux="${db_root_password:-}"
+#            ## Check Mariadb is available!
+#            #  Check mariadb status
+#            mysqladmin --host=mariadb-service --port=30306 --user=root --password="${password_aux}" status
+#            #  Check database DSM is available in mariadb
+#            mysql --host=mariadb-service --port=30306 --user=root --password="${password_aux}" -e 'use DSM;'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+  labels:
+    app.kubernetes.io/name: auth-service
+spec:
+  # Fixed IP address for Traefik middleware to access
+  clusterIP: 10.43.101.20
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: dsm-auth
+  selector:
+    app.kubernetes.io/name: auth-service

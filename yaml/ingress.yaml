@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-service
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    ## Traefik Middleware used in Ingress，
+    ## Rule is  {namespace name}-{middleware name}@{resource type}
+    traefik.ingress.kubernetes.io/router.middlewares: default-authentication-middleware@kubernetescrd
+spec:
+  defaultBackend:
+    service:
+      name: web-service
+      port:
+        number: 80
+  rules:
+  - host: management.magnascale.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-service
+            port:
+              number: 80

@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-service
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: web-service
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: web-service
+    spec:
+      shareProcessNamespace: true
+      containers:
+      - name: web-service
+        image: lenovonetapp.io/library/dsm-auth:1.0
+        workingDir: /usr/local/lib/python3.8/site-packages/helloworld
+        command: ["python3"]
+        args: ["main.py", "--host", $(flask_host), "--port", $(flask_port)]
+        imagePullPolicy: Never
+        env:
+          - name: flask_host
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: flask_port
+            value: "80"
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  labels:
+    app.kubernetes.io/name: web-service
+spec:
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      name: web-service
+  selector:
+    app.kubernetes.io/name: web-service
