@@ -1,8 +1,8 @@
 import configparser
 
 config = configparser.ConfigParser()
-# config.read("/opt/dsm_auth/dsm_auth.conf")
-config.read("../dsm_auth.conf")
+config.read("/opt/dsm_auth/dsm_auth.conf")
+# config.read("../dsm_auth.conf")
 db_config = config["Database"]
 flask_config = config["Flask"]
 
