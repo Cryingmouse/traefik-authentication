@@ -88,8 +88,6 @@ metadata:
   labels:
     app.kubernetes.io/name: auth-service
 spec:
-  # Fixed IP address for Traefik middleware to access
-  clusterIP: 10.43.101.20
   ports:
     - protocol: TCP
       port: 80

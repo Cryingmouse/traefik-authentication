@@ -113,8 +113,6 @@ def get_token_by_current_user():
 
 
 def response_handler(status=200, message=None):
-    # TODO: it only considers the basic authentication logic,
-    # next step, it will cover bearer authorization.
     username, token = get_token_by_current_user()
 
     response_object = {
