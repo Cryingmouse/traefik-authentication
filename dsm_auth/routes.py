@@ -27,6 +27,8 @@ multi_auth = MultiAuth(basic_auth, token_auth)
 
 @basic_auth.verify_password
 def verify_password(username, password):
+    logging.debug("Entering the function verify_password()", username=username,
+                  password=password)
     if username is None or password is None:
         logging.error("username or password is missing")
         return None
@@ -39,6 +41,9 @@ def verify_password(username, password):
             token = user.get_token()
             life_time = current_app.config.get("TOKEN_LIFETIME")
             cache.set(token, 1, timeout=life_time)
+
+            logging.debug("Exiting the function verify_token()",
+                          username=username)
             return username
     else:
         logging.error("username or password is incorrect.")
@@ -49,6 +54,8 @@ def verify_password(username, password):
 #  (Only step 3). It would be faster for authentication.
 @token_auth.verify_token
 def verify_token(token):
+    logging.debug("Entering the function verify_token()", token=token)
+
     if token is None:
         logging.error("token is missing")
         return None
@@ -88,15 +95,16 @@ def verify_token(token):
     else:
         logging.error('the user is not found')
         return None
+
+    logging.debug("Exiting the function verify_token()", username=user.username)
     return user.username
 
 
 @app.route("/auth/", methods=["GET", "POST"], strict_slashes=False)
 @multi_auth.login_required()
 def login():
-    logging.info(request.headers)
-    logging.info(request.url)
-    logging.info(request.remote_addr)
+    logging.debug(headers=request.headers)
+    logging.info(url=request.url)
 
     message = "Login successfully."
     return response_handler(message=message)
@@ -127,8 +135,8 @@ def response_handler(status=200, message=None):
 
     response.headers["X-Remote-Address"] = request.remote_addr
 
-    logging.info(response.headers)
-    logging.info(response.response)
+    logging.debug(headers=response.headers)
+    logging.info(response=response.response)
 
     return response, status
 

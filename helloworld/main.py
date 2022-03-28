@@ -15,9 +15,8 @@ app = Flask(__name__)
 
 @app.route("/hello/", methods=["GET", "POST"], strict_slashes=False)
 def hello():
-    logging.info(request.headers)
+    logging.debug(request.headers)
     logging.info(request.url)
-    logging.info(request.remote_addr)
 
     response_object = {
         'message': 'Hello World',
@@ -26,7 +25,7 @@ def hello():
     response = make_response(jsonify(response_object))
     response.headers["Token"] = request.headers["X-Token"]
 
-    logging.info(response.headers)
+    logging.debug(response.headers)
     logging.info(response.response)
 
     return response, 200
