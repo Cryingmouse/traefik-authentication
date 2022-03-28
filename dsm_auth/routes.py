@@ -1,5 +1,6 @@
 import argparse
 import logging
+import uuid
 
 from flask import current_app, make_response, request, jsonify
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth, MultiAuth
@@ -133,7 +134,7 @@ def response_handler(status=200, message=None):
     if username is not None:
         response.headers['X-Auth-User'] = username
 
-    response.headers["X-Remote-Address"] = request.remote_addr
+    response.headers['X-Trace-ID'] = str(uuid.uuid4())
 
     logging.debug(headers=response.headers)
     logging.info(response=response.response)

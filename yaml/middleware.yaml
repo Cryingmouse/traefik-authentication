@@ -10,3 +10,4 @@ spec:
     authResponseHeaders:
       - X-Auth-User
       - X-Token
+      - X-Trace-ID

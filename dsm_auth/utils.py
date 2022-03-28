@@ -1,6 +1,7 @@
 from hashlib import sha512
-from flask import request
+
 import six
+from flask import request
 
 
 def get_remote_address():
@@ -19,6 +20,7 @@ def create_browser_id():
     h = sha512()
     h.update(base_str.encode('utf8'))
     return h.hexdigest()
+
 
 def constant_time_compare(val1, val2):
     """
