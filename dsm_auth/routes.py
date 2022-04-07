@@ -28,8 +28,7 @@ multi_auth = MultiAuth(basic_auth, token_auth)
 
 @basic_auth.verify_password
 def verify_password(username, password):
-    logging.debug("Entering the function verify_password()", username=username,
-                  password=password)
+    logging.debug("Entering the function verify_password()")
     if username is None or password is None:
         logging.error("username or password is missing")
         return None
@@ -43,8 +42,7 @@ def verify_password(username, password):
             life_time = current_app.config.get("TOKEN_LIFETIME")
             cache.set(token, 1, timeout=life_time)
 
-            logging.debug("Exiting the function verify_token()",
-                          username=username)
+            logging.debug("Exiting the function verify_password()")
             return username
     else:
         logging.error("username or password is incorrect.")
@@ -55,7 +53,7 @@ def verify_password(username, password):
 #  (Only step 3). It would be faster for authentication.
 @token_auth.verify_token
 def verify_token(token):
-    logging.debug("Entering the function verify_token()", token=token)
+    logging.debug("Entering the function verify_token()")
 
     if token is None:
         logging.error("token is missing")
@@ -97,15 +95,15 @@ def verify_token(token):
         logging.error('the user is not found')
         return None
 
-    logging.debug("Exiting the function verify_token()", username=user.username)
+    logging.debug("Exiting the function verify_token()")
     return user.username
 
 
 @app.route("/auth/", methods=["GET", "POST"], strict_slashes=False)
 @multi_auth.login_required()
 def login():
-    logging.debug(headers=request.headers)
-    logging.info(url=request.url)
+    logging.debug(request.headers)
+    logging.info(request.url)
 
     message = "Login successfully."
     return response_handler(message=message)
