@@ -1,9 +1,6 @@
 from datetime import datetime
-from flask import current_app
-from itsdangerous import URLSafeSerializer
 
-from app import db
-from dsm_auth.utils import create_browser_id
+from dsm_auth.app import db
 
 
 class User(db.Model):
@@ -19,13 +16,3 @@ class User(db.Model):
 
     def __repr__(self):
         return "User<name:%r>" % self.username
-
-    def get_token(self, life_time=None):
-        key = current_app.config.get("SECRET_KEY")
-        s = URLSafeSerializer(key)
-        browser_id = create_browser_id()
-        if not life_time:
-            life_time = current_app.config.get("TOKEN_LIFETIME")
-        token = s.dumps(
-            (self.id, self.username, self.password, browser_id, life_time))
-        return token

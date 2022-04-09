@@ -23,15 +23,10 @@ def get_database_url():
 class Config:
     DEBUG = eval(flask_config['debug']) \
         if flask_config['debug'] is not None else False
-    SECRET_KEY = flask_config["secret_key"] or 'secret-key'
 
-    TOKEN_LIFETIME = int(flask_config["token_lifetime"]) \
-        if flask_config["token_lifetime"] is not None else 180
+    SECRET_KEY = flask_config["secret_key"] or 'secret-key'
 
     SQLALCHEMY_TRACK_MODIFICATIONS = eval(flask_config['sqlalchemy_track_modifications']) \
         if flask_config['sqlalchemy_track_modifications'] is not None else False
-
-    CACHE_KEY_PREFIX = ''
-    CACHE_TYPE = 'SimpleCache'
 
     SQLALCHEMY_DATABASE_URI = get_database_url()

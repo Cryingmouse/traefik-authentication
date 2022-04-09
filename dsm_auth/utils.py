@@ -16,10 +16,12 @@ def create_browser_id():
     agent = request.headers.get('User-Agent')
     if not agent:
         agent = str(agent).encode('utf-8')
+    # TODO: Need traefik middleware to make sure the remote address is from
+    #  the client side, otherwise it may get a trouble.
     base_str = "%s|%s" % (get_remote_address(), agent)
     h = sha512()
     h.update(base_str.encode('utf8'))
-    return h.hexdigest()
+    return str(h.hexdigest())
 
 
 def constant_time_compare(val1, val2):

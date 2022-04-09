@@ -21,6 +21,5 @@ data:
     [Flask]
       debug=True
       sqlalchemy_track_modifications = True
-      token_lifetime: 180
       # TODO: this configuration should be in secret yaml file.
       secret_key: secret-key
