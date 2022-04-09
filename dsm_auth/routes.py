@@ -10,10 +10,11 @@ from gevent.pywsgi import WSGIServer
 
 from dsm_auth.app import create_app, bcrypt
 from dsm_auth.models import User
+from dsm_auth.settings import Config
 from dsm_auth.utils import create_browser_id, constant_time_compare
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.DEBUG if Config.DEBUG else logging.INFO,
     format="%(asctime)s - %(levelname)-8s "
            "[%(filename)s:line %(lineno)s %(funcName)s()] %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S"
@@ -27,7 +28,8 @@ multi_auth = MultiAuth(basic_auth, token_auth)
 
 @basic_auth.verify_password
 def verify_password(username, password):
-    logging.debug(f"Entering verify_password(), args={username}, {password}")
+    logging.debug(
+        f"Entering the function, username={username}, password={password}")
 
     if username is None or password is None:
         logging.error("Username or password is missing")
@@ -38,7 +40,7 @@ def verify_password(username, password):
         hash_password = user.password
 
         if bcrypt.check_password_hash(hash_password, password):
-            logging.debug("Exiting verify_password()")
+            logging.debug("Exiting the function")
             return username
     else:
         logging.error("Username or password is incorrect.")
@@ -47,7 +49,7 @@ def verify_password(username, password):
 
 @token_auth.verify_token
 def verify_token(token):
-    logging.debug(f"Entering verify_token(), args={token}")
+    logging.debug(f"Entering the function, token={token}")
 
     if token is None:
         logging.error("Token is missing")
@@ -69,7 +71,7 @@ def verify_token(token):
         logging.error(f"The user {username} is not found")
         return None
 
-    logging.debug("Exiting verify_token()")
+    logging.debug("Exiting the function")
     return user.username
 
 
