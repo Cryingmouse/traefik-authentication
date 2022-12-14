@@ -68,6 +68,13 @@ following yaml files:
 The user can run the command `kubectl apply -R -f ./yaml` to deploy all the 
 resources.
 
+### Step 7
+User can use the curl command to verify:
+```angular2html
+curl http://root:xuanyuan=1@10.128.131.240:32080/hello/  -H "Host:management.magnascale.com"
+```
+
+
 ## NOTICE:
 In this demo, the user has to run `python3 manager.py` in `dsm_auth` pod to 
 inject the authentication user first.
