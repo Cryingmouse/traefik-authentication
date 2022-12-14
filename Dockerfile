@@ -1,4 +1,4 @@
-FROM python:3.8.12-alpine3.15 as build-env
+FROM python:3.9.16-alpine3.17 as build-env
 
 WORKDIR /root
 
@@ -22,7 +22,7 @@ RUN set -x \
   && pip3 install dsm_auth*.whl
 
 
-FROM python:3.8.12-alpine3.15
+FROM python:3.9.16-alpine3.17
 WORKDIR /root
 
 COPY --from=build-env /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages

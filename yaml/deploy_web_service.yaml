@@ -17,7 +17,7 @@ spec:
       containers:
       - name: web-service
         image: lenovonetapp.io/library/dsm-auth:1.0
-        workingDir: /usr/local/lib/python3.8/site-packages/helloworld
+        workingDir: /usr/local/lib/python3.9/site-packages/helloworld
         command: ["python3"]
         args: ["main.py", "--host", $(flask_host), "--port", $(flask_port)]
         imagePullPolicy: Never
