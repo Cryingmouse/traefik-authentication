@@ -14,7 +14,7 @@ def get_database_url():
     password = db_config["root_password"] or 'NAS_PASS'
     host = db_config["host"] or 'localhost'
     port = int(db_config["port"]) if db_config["port"] is not None else 3306
-    database = db_config["name"] or 'auth'
+    database = db_config["name"] or 'DSM'
 
     return '{}+{}://{}:{}@{}:{}/{}'.format(name, driver, username, password,
                                            host, port, database)
