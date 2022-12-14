@@ -30,23 +30,6 @@ def hello():
 
     return response, 200
 
-@app.route("/hello/", methods=["GET", "POST"], strict_slashes=False)
-def hello():
-    logging.debug(request.headers)
-    logging.info(request.url)
-
-    response_object = {
-        'message': 'Hello World',
-    }
-
-    response = make_response(jsonify(response_object))
-    response.headers["Token"] = request.headers["X-Token"]
-
-    logging.debug(response.headers)
-    logging.info(response.response)
-
-    return response, 200
-
 
 def parse_args():
     description = "You should launch flask app with the following parameters!"
