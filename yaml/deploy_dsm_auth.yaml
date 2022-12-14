@@ -15,8 +15,8 @@ spec:
     spec:
       shareProcessNamespace: true
       containers:
-      - name: dsm-auth
-        image: lenovonetapp.io/library/dsm-auth:1.0
+      - name: dsm_auth
+        image: lenovonetapp.io/library/dsm_auth:1.0
         workingDir: /usr/local/lib/python3.9/site-packages/dsm_auth
 #        command: ["/bin/bash", "-ce", "tail -f /dev/null"]
         command: ["python3"]
@@ -48,18 +48,18 @@ spec:
 #                #  Check database DSM is available in mariadb
 #                mysql --host=mariadb-service --port=30306 --user=root --password="${password_aux}" -e 'use DSM;'
         volumeMounts:
-        - name: dsm-auth-log
+        - name: dsm_auth-log
           mountPath: /var/log/dsm
-        - name: dsm-auth-conf
+        - name: dsm_auth-conf
           mountPath: /opt/dsm_auth/dsm_auth.conf
           subPath: dsm_auth.conf
       volumes:
-      - name: dsm-auth-log
+      - name: dsm_auth-log
         hostPath:
           path: /var/log/dsm
-      - name: dsm-auth-conf
+      - name: dsm_auth-conf
         configMap:
-          name: dsm-auth
+          name: dsm_auth
 
 #      initContainers:
 #      - name: check-mariadb
@@ -68,7 +68,7 @@ spec:
 #          - name: db_root_password
 #            valueFrom:
 #              configMapKeyRef:
-#                name: dsm-auth
+#                name: dsm_auth
 #                key: db_root_password
 #        command:
 #          - /bin/bash
@@ -92,6 +92,6 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-      name: dsm-auth
+      name: dsm_auth
   selector:
     app.kubernetes.io/name: auth-service

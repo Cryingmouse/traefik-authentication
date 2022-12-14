@@ -16,7 +16,7 @@ spec:
       shareProcessNamespace: true
       containers:
       - name: web-service
-        image: lenovonetapp.io/library/dsm-auth:1.0
+        image: lenovonetapp.io/library/dsm_auth:1.0
         workingDir: /usr/local/lib/python3.9/site-packages/helloworld
         command: ["python3"]
         args: ["main.py", "--host", $(flask_host), "--port", $(flask_port)]

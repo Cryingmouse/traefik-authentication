@@ -38,9 +38,9 @@ In k3s environment, you need to start `buildkitd` with the parameter
 `--containerd-worker-addr /run/k3s/containerd/containerd.sock`
 And then, you can build containerd image as follow:
 ```
-buildctl build --frontend=dockerfile.v0 --local context=. --local dockerfile=. --output type=image,name=lenovonetapp.io/library/dsm-auth:1.0
+buildctl build --frontend=dockerfile.v0 --local context=. --local dockerfile=. --output type=image,name=lenovonetapp.io/library/dsm_auth:1.0
 
-ctr -n buildkit image export dsm_auth-1.0.tar lenovonetapp.io/library/dsm-auth:1.0
+ctr -n buildkit image export dsm_auth-1.0.tar lenovonetapp.io/library/dsm_auth:1.0
 ```
 By default, the image built by buildctl is in `buildkit` namespace. You can 
 use the parameter `--namespace=default` to set the namespace for the image.
@@ -62,7 +62,7 @@ following yaml files:
    request to `dsm_auth` service.
 3. cm_dsm_auth.yaml: Define the configuration for dsm_auth service, 
    including database configuration, flask configuration.
-4. deploy_dsm_auth.yaml: Deploy `dsm-auth` service for authentication.
+4. deploy_dsm_auth.yaml: Deploy `dsm_auth` service for authentication.
 5. deploy_web_service.yaml: Deploy `web-service` service.
 
 The user can run the command `kubectl apply -R -f ./yaml` to deploy all the 

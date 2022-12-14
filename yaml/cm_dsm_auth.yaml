@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: dsm-auth
+  name: dsm_auth
   labels:
-    app.kubernetes.io/name: dsm-auth
-    helm.sh/chart: dsm-auth-1.0
-    app.kubernetes.io/instance: dsm-auth
+    app.kubernetes.io/name: dsm_auth
+    helm.sh/chart: dsm_auth-1.0
+    app.kubernetes.io/instance: dsm_auth
 data:
   dsm_auth.conf: |
     [Database]
